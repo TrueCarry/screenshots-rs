@@ -19,7 +19,6 @@ pub fn capture_screen(display_info: &DisplayInfo) -> Result<Image> {
     Vec::from(cg_image.data().bytes()),
     cg_image.width() as u32,
     cg_image.height() as u32,
-    cg_image.bytes_per_row(),
   )?;
 
   Ok(image)
@@ -56,7 +55,6 @@ pub fn capture_screen_area(
     Vec::from(cg_image.data().bytes()),
     cg_image.width() as u32,
     cg_image.height() as u32,
-    cg_image.bytes_per_row(),
   )?;
 
   Ok(image)

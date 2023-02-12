@@ -19,11 +19,11 @@ impl Image {
     bgra: Vec<u8>,
     width: u32,
     height: u32,
-    bytes_per_row: usize,
   ) -> Result<Self, EncodingError> {
     let mut buffer = Vec::new();
     let size = (width * height * 4) as usize;
-    let mut bytes = vec![0u8; size];
+    let mut bytes: Vec<u8> = vec![0u8; size];
+    bytes.clone_from_slice(&bgra);
 
     let u_width = width as usize;
     let u_height = height as usize;
@@ -33,18 +33,16 @@ impl Image {
     // https://github.com/nashaofu/screenshots-rs/issues/29
     // https://github.com/nashaofu/screenshots-rs/issues/38
     // BGRA 转换为 RGBA
-    for r in 0..u_height {
-      for c in 0..u_width {
-        let index = (r * u_width + c) * 4;
-        let i = r * bytes_per_row + c * 4;
-        let b = bgra[i];
-        let r = bgra[i + 2];
+    // for r in 0..u_height {
+    //   for c in 0..u_width {
+    //     let index = (r * u_width + c) * 4;
+    //     bytes.swap(index, index + 2)
+    //   }
+    // }
 
-        bytes[index] = r;
-        bytes[index + 1] = bgra[i + 1];
-        bytes[index + 2] = b;
-        bytes[index + 3] = bgra[i + 3];
-      }
+    // let pixel_size = 4 as usize;
+    for i in 0..u_width * u_height {      
+      bytes.swap(i*4, i*4 + 2)
     }
 
     let mut encoder = Encoder::new(&mut buffer, width, height);
